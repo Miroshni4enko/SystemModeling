@@ -1,14 +1,7 @@
 package edik.cource_work.model;
 
-import edik.cource_work.model.ExecutionThread;
-import edik.cource_work.model.TaskType;
-
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 
 import static edik.cource_work.controller.ExecutionThreadsService.*;

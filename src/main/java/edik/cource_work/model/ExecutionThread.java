@@ -20,6 +20,7 @@ public class ExecutionThread implements Callable<List<Integer>> {
     private final int amountOfNeededPermit;
     private Semaphore semaphore;
     private TaskType taskType;
+    private AtomicBoolean hasPermit = new AtomicBoolean();
 
     public ExecutionThread(Semaphore semaphore, int amountOfNeededPermit, int amountOfTasks, TaskType taskType) {
         this.semaphore = semaphore;
@@ -35,14 +36,15 @@ public class ExecutionThread implements Callable<List<Integer>> {
     public List<Integer> call() throws InterruptedException {
         List<Integer> resultList = new ArrayList<Integer>();
         startArriveTimer();
+        getPermit();
         while (!stop.get()) {
-            System.out.println(stop.get() + taskType.name());
+            //System.out.println(stop.get() + taskType.name());
             if (executionQueue.get() == 0) {
                 Thread.currentThread().yield();
             } else {
-                semaphore.acquire(amountOfNeededPermit);
+                getPermit();
                 executeTasks(resultList);
-                semaphore.release(amountOfNeededPermit);
+                releasePermit();
             }
         }
         return resultList;
@@ -55,16 +57,34 @@ public class ExecutionThread implements Callable<List<Integer>> {
             TimeUnit.SECONDS.sleep(timeOfTask);
             resultList.add(timeOfTask);
         }
-        System.out.println("tttttttttt");
+
     }
 
     public void stop() {
         this.stop.set(true);
     }
 
+    private void getPermit(){
+        try {
+            if (!hasPermit.get()) {
+                semaphore.acquire(amountOfNeededPermit);
+                hasPermit.set(true);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void releasePermit(){
+        if (hasPermit.get()) {
+            semaphore.release(amountOfNeededPermit);
+            hasPermit.set(false);
+        }
+    }
+
     private void startArriveTimer(){
         Thread thread = new Thread(new ArriveTaskTimer());
-        thread.setDaemon(true);
+        //thread.setDaemon(true);
         thread.start();
     }
 
@@ -74,6 +94,7 @@ public class ExecutionThread implements Callable<List<Integer>> {
                 while (!stop.get()) {
                     if (amountOfTasks.get() == 0) {
                         Thread.currentThread().yield();
+
                     } else {
                         int timeArrive = taskType.getArriveTime();
                         System.out.println("i = " + amountOfTasks +" taskType = "+ taskType.name() + "timeArrive = " + timeArrive);

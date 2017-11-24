@@ -13,7 +13,7 @@ public class MainTest {
             System.out.println(i +" i");
             System.out.println(atomicInteger.get());
             //System.out.println(taskType.name());
-            //int timeOfTask = taskType.getTime();
+            //int timeOfTask = taskType.getTaskTime();
             //System.out.println(timeOfTask);
          //   TimeUnit.SECONDS.sleep(atomicInteger.get());
           //  resultList.add(timeOfTask);
