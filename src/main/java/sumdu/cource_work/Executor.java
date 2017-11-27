@@ -1,7 +1,7 @@
-package edik.cource_work;
+package sumdu.cource_work;
 
-import edik.cource_work.view.MainSchemaWindow;
-import edik.cource_work.view.MainSchemaWindowImpl;
+import sumdu.cource_work.view.MainSchemaWindow;
+import sumdu.cource_work.view.swing.MainSchemaWindowImpl;
 
 /**
  * Created by Слава on 15.11.2017.

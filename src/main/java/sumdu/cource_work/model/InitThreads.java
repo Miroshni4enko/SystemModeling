@@ -1,10 +1,10 @@
-package edik.cource_work.model;
+package sumdu.cource_work.model;
 
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
-import static edik.cource_work.controller.ExecutionThreadsService.*;
+import static sumdu.cource_work.controller.ExecutionThreadsService.*;
 
 /**
  * Created by Слава on 19.11.2017.

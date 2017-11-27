@@ -1,4 +1,4 @@
-package edik.cource_work.model;
+package sumdu.cource_work.model;
 
 /**
  * Created by Слава on 18.11.2017.

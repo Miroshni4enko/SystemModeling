@@ -1,13 +1,14 @@
-package edik.cource_work.view;
+package sumdu.cource_work.view.swing;
+
+import sumdu.cource_work.view.ControlThreadView;
 
 import javax.swing.*;
-import javax.swing.text.LabelView;
 import java.awt.*;
 
 /**
  * Created by Слава on 25.11.2017.
  */
-public class ControlThreadViewImpl extends Box implements ControlThreadView {
+public class ControlThreadViewImpl extends HorizontalBox implements ControlThreadView {
     private JLabel titleLabel = new JLabel();
     private JLabel tasksInQueueLabel = new JLabel();
     private JLabel tasksOfExeLabel = new JLabel();
@@ -27,10 +28,6 @@ public class ControlThreadViewImpl extends Box implements ControlThreadView {
         this.add(timeOfArriveTaskLabel);
     }
 
-    public ControlThreadViewImpl() {
-        super(BoxLayout.X_AXIS);
-
-    }
 
     public void setTitle(String string) {
         titleLabel.setText(string);

@@ -1,4 +1,4 @@
-package edik.cource_work.view;
+package sumdu.cource_work.view;
 
 /**
  * Created by Слава on 25.11.2017.

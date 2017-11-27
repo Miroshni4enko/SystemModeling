@@ -1,8 +1,9 @@
-package edik.cource_work.model;
+package sumdu.cource_work.model;
+
+import sumdu.cource_work.view.ControlThreadView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
@@ -22,11 +23,15 @@ public class ExecutionThread implements Callable<List<Integer>> {
     private TaskType taskType;
     private AtomicBoolean hasPermit = new AtomicBoolean();
 
+    private ControlThreadView view;
+
     public ExecutionThread(Semaphore semaphore, int amountOfNeededPermit, int amountOfTasks, TaskType taskType) {
         this.semaphore = semaphore;
         this.amountOfNeededPermit = amountOfNeededPermit;
         this.amountOfTasks.set(amountOfTasks);
         this.taskType = taskType;
+        view.setTitle(taskType.name());
+        view.setAmountOfTasks(amountOfTasks);
     }
 
     public void addTasksToQueue(int amountOfTasks) {
@@ -54,6 +59,7 @@ public class ExecutionThread implements Callable<List<Integer>> {
         for ( ; executionQueue.get() > 0; executionQueue.decrementAndGet()){
             int timeOfTask = taskType.getTaskTime();
             System.out.println("i = " + executionQueue +" taskType = "+ taskType.name() + "timeOfTask = " + timeOfTask);
+            view.setTimeOfTaskExe(timeOfTask);
             TimeUnit.SECONDS.sleep(timeOfTask);
             resultList.add(timeOfTask);
         }
@@ -98,9 +104,10 @@ public class ExecutionThread implements Callable<List<Integer>> {
                     } else {
                         int timeArrive = taskType.getArriveTime();
                         System.out.println("i = " + amountOfTasks +" taskType = "+ taskType.name() + "timeArrive = " + timeArrive);
+                        view.setTimeOfArriveTask(timeArrive);
                         TimeUnit.SECONDS.sleep(timeArrive);
-                        amountOfTasks.decrementAndGet();
-                        executionQueue.incrementAndGet();
+                        view.setAmountOfTasks(amountOfTasks.decrementAndGet());
+                        view.setTasksInQueue(executionQueue.incrementAndGet());
                     }
                 }
             } catch (InterruptedException e) {

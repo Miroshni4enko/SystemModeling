@@ -1,4 +1,4 @@
-package edik.cource_work.view;
+package sumdu.cource_work.view.swing;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
