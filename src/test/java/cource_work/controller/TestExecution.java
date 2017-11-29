@@ -15,9 +15,9 @@ import java.util.concurrent.TimeUnit;
 public class TestExecution {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         ExecutionThreadsService executionThreadsService = new ExecutionThreadsService();
-        executionThreadsService.startService(5,4,3);
+        //executionThreadsService.startService(5,4,3);
         TimeUnit.SECONDS.sleep(100);
-        executionThreadsService.addTasksOfType(1, TaskType.B);
+        //executionThreadsService.addTasksOfType(1, TaskType.B);
         Map<TaskType, List<Integer>> map = executionThreadsService.stopServiceAndGetResult();
         System.out.println(map);
     }

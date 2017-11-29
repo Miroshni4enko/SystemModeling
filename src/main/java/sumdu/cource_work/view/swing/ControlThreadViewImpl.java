@@ -9,23 +9,30 @@ import java.awt.*;
  * Created by Слава on 25.11.2017.
  */
 public class ControlThreadViewImpl extends HorizontalBox implements ControlThreadView {
-    private JLabel titleLabel = new JLabel();
-    private JLabel tasksInQueueLabel = new JLabel();
-    private JLabel tasksOfExeLabel = new JLabel();
-    private JLabel timeOfTaskExeLabel = new JLabel();
-    private JLabel timeOfArriveTaskLabel = new JLabel();
-    private JLabel resultLabel = new JLabel();
+    private JTextField titleLabel = new JTextField(2);
+    private JTextField tasksInQueueLabel = new JTextField(2);
+    private JTextField tasksOfExeLabel = new JTextField(2);
+    private JTextField timeOfTaskExeLabel = new JTextField(2);
+    private JTextField timeOfArriveTaskLabel = new JTextField(2);
+    private JTextField resultLabel = new JTextField(12);
     {
+        titleLabel.setEditable(false);
+        tasksInQueueLabel.setEditable(false);
+        tasksOfExeLabel.setEditable(false);
+        timeOfTaskExeLabel.setEditable(false);
+        timeOfArriveTaskLabel.setEditable(false);
+        resultLabel.setEditable(false);
+        this.add(titleLabel);
         this.add(new Label(" Tasks for exe:"));
         this.add(tasksOfExeLabel);
         this.add(new Label(" Arrive Time:"));
         this.add(timeOfArriveTaskLabel);
         this.add(new Label(" Task in Queue:"));
-        this.add(timeOfArriveTaskLabel);
+        this.add(tasksInQueueLabel);
         this.add(new Label(" Exe Time:"));
-        this.add(timeOfArriveTaskLabel);
+        this.add(timeOfTaskExeLabel);
         this.add(new Label(" Result:"));
-        this.add(timeOfArriveTaskLabel);
+        this.add(resultLabel);
     }
 
 

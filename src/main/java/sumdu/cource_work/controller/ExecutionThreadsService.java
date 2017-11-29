@@ -14,14 +14,14 @@ import static sumdu.cource_work.model.TaskType.*;
  * Created by Слава on 18.11.2017.
  */
 public class ExecutionThreadsService implements ExecutionService {
-    public final static int AMOUNT_PERMIT_FOR_PARALLEL_THREAD = 0; // for A and B we  need no permits
+    public final static int AMOUNT_PERMIT_FOR_PARALLEL_THREAD = 1; // for A and B we  need no permits
     public final static int AMOUNT_PERMIT_FOR_THREAD_WITH_CONDITION = 2;// when A and B tasks do release permit C get 2 permit
     private ExecutorService executorService = Executors.newFixedThreadPool(6);
     private InitThreads initThreads;
     private List<Future<List<Integer>>> list;
 
-    public void startService(int amountOfTaskA, int amountOfTaskB, int amountOfTaskC, MainSchemaWindow mainSchemaWindow) throws InterruptedException {
-        initThreads = new InitThreads(amountOfTaskA, amountOfTaskB, amountOfTaskC, mainSchemaWindow);
+    public void startService(MainSchemaWindow mainSchemaWindow) throws InterruptedException {
+        initThreads = new InitThreads(mainSchemaWindow);
         Map<TaskType, ExecutionThread>  threadsMap =  initThreads.createExecutionThreads();
         list = executorService.invokeAll(Arrays.asList(threadsMap.get(A),
                                                        threadsMap.get(B),
@@ -42,17 +42,5 @@ public class ExecutionThreadsService implements ExecutionService {
             e.printStackTrace();
         }
         return resultMap;
-    }
-
-    public void addTasksOfType(int amount, TaskType taskType){
-        System.out.printf("add task");
-        switch (taskType){
-            case A: initThreads.addAmountOfTaskA(amount);
-                break;
-            case B: initThreads.addAmountOfTaskB(amount);
-                break;
-            case C: initThreads.addAmountOfTaskC(amount);
-                break;
-        }
     }
 }

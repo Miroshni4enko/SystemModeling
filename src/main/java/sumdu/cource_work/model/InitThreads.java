@@ -1,52 +1,30 @@
 package sumdu.cource_work.model;
 
+import sumdu.cource_work.view.ControlThreadView;
+import sumdu.cource_work.view.MainSchemaWindow;
+
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 import static sumdu.cource_work.controller.ExecutionThreadsService.*;
+import static sumdu.cource_work.model.TaskType.*;
 
 /**
  * Created by Слава on 19.11.2017.
  */
 public class InitThreads {
-    private final Semaphore semaphore = new Semaphore(2, true);
-    private int amountOfTaskA;
-    private int amountOfTaskB;
-    private int amountOfTaskC;
-    private Map<TaskType, ExecutionThread> threadsMap = new EnumMap<TaskType, ExecutionThread>(TaskType.class);;
+    private final Semaphore semaphore = new Semaphore(0, true);
 
-    public InitThreads(int amountOfTaskA, int amountOfTaskB, int amountOfTaskC) {
-        this.amountOfTaskA = amountOfTaskA;
-        this.amountOfTaskB = amountOfTaskB;
-        this.amountOfTaskC = amountOfTaskC;
+    private Map<TaskType, ExecutionThread> threadsMap = new EnumMap<TaskType, ExecutionThread>(TaskType.class);
+    private MainSchemaWindow mainSchemaWindow;
+
+    public InitThreads(MainSchemaWindow mainSchemaWindow) {
+        this.mainSchemaWindow = mainSchemaWindow;
     }
 
-    public void setAmountOfTaskA(int amountOfTaskA) {
-        this.amountOfTaskA = amountOfTaskA;
-    }
 
-    public void setAmountOfTaskB(int amountOfTaskB) {
-        this.amountOfTaskB = amountOfTaskB;
-    }
-
-    public void setAmountOfTaskC(int amountOfTaskC) {
-        this.amountOfTaskC = amountOfTaskC;
-    }
-
-    public int getAmountOfTaskA() {
-        return amountOfTaskA;
-    }
-
-    public int getAmountOfTaskB() {
-        return amountOfTaskB;
-    }
-
-    public int getAmountOfTaskC() {
-        return amountOfTaskC;
-    }
-
-    public void addAmountOfTaskA(int amountOfTaskA) {
+    /*public void addAmountOfTaskA(int amountOfTaskA) {
         this.amountOfTaskA = amountOfTaskA;
         threadsMap.get(TaskType.A).addTasksToQueue(amountOfTaskA);
     }
@@ -59,12 +37,14 @@ public class InitThreads {
     public void addAmountOfTaskC(int amountOfTaskC) {
         this.amountOfTaskC = amountOfTaskC;
         threadsMap.get(TaskType.C).addTasksToQueue(amountOfTaskC);
-    }
+    }*/
 
     public Map<TaskType, ExecutionThread> createExecutionThreads() {
-        threadsMap.put(TaskType.A, new ExecutionThread(semaphore, AMOUNT_PERMIT_FOR_PARALLEL_THREAD, amountOfTaskA, TaskType.A));
-        threadsMap.put(TaskType.B, new ExecutionThread(semaphore, AMOUNT_PERMIT_FOR_PARALLEL_THREAD, amountOfTaskB,  TaskType.B));
-        threadsMap.put(TaskType.C, new ExecutionThread(semaphore, AMOUNT_PERMIT_FOR_THREAD_WITH_CONDITION, amountOfTaskC, TaskType.C));
+        Map<TaskType, Integer> initValueMap = mainSchemaWindow.getInitializedFields().getInitAmountOfTasks();
+        Map<TaskType, Integer> initLimitValueMap = mainSchemaWindow.getInitializedLimitFields().getInitLimitsOfTasks();
+        threadsMap.put(A, new ExecutionThread(semaphore, AMOUNT_PERMIT_FOR_PARALLEL_THREAD, initValueMap.get(A), initLimitValueMap.get(A), A, mainSchemaWindow.getViewForA()));
+        threadsMap.put(B, new ExecutionThread(semaphore, AMOUNT_PERMIT_FOR_PARALLEL_THREAD, initValueMap.get(B), initLimitValueMap.get(B), B, mainSchemaWindow.getViewForB()));
+        threadsMap.put(C, new ExecutionThread(semaphore, AMOUNT_PERMIT_FOR_THREAD_WITH_CONDITION, initValueMap.get(C), initLimitValueMap.get(B), C, mainSchemaWindow.getViewForC()));
         return threadsMap;
     }
 

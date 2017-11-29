@@ -4,9 +4,9 @@ package sumdu.cource_work.model;
  * Created by Слава on 18.11.2017.
  */
 public enum TaskType {
-    A (5, 1, 1, 0),
-    B (5, 1, 1, 0),
-    C (5, 1, 1, 0);
+    A (5, 1, 8, 0),
+    B (5, 1, 8, 0),
+    C (5, 1, 8, 0);
 
     private int taskTime;
     private int taskDiff;

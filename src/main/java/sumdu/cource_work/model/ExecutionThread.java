@@ -3,6 +3,7 @@ package sumdu.cource_work.model;
 import sumdu.cource_work.view.ControlThreadView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.Callable;
@@ -22,14 +23,17 @@ public class ExecutionThread implements Callable<List<Integer>> {
     private Semaphore semaphore;
     private TaskType taskType;
     private AtomicBoolean hasPermit = new AtomicBoolean();
+    private AtomicInteger limit = new AtomicInteger();
 
     private ControlThreadView view;
 
-    public ExecutionThread(Semaphore semaphore, int amountOfNeededPermit, int amountOfTasks, TaskType taskType) {
+    public ExecutionThread(Semaphore semaphore, int amountOfNeededPermit, int amountOfTasks, int limit, TaskType taskType, ControlThreadView controlThreadView) {
         this.semaphore = semaphore;
         this.amountOfNeededPermit = amountOfNeededPermit;
         this.amountOfTasks.set(amountOfTasks);
+        this.limit.set(limit);
         this.taskType = taskType;
+        this.view = controlThreadView;
         view.setTitle(taskType.name());
         view.setAmountOfTasks(amountOfTasks);
     }
@@ -49,7 +53,9 @@ public class ExecutionThread implements Callable<List<Integer>> {
             } else {
                 getPermit();
                 executeTasks(resultList);
-                releasePermit();
+                if(amountOfTasks.get() == 0) {
+                    releasePermit();
+                }
             }
         }
         return resultList;
@@ -57,13 +63,25 @@ public class ExecutionThread implements Callable<List<Integer>> {
 
     private void executeTasks(List<Integer> resultList) throws InterruptedException {
         for ( ; executionQueue.get() > 0; executionQueue.decrementAndGet()){
+            view.setTasksInQueue(executionQueue.get());
             int timeOfTask = taskType.getTaskTime();
             System.out.println("i = " + executionQueue +" taskType = "+ taskType.name() + "timeOfTask = " + timeOfTask);
             view.setTimeOfTaskExe(timeOfTask);
             TimeUnit.SECONDS.sleep(timeOfTask);
             resultList.add(timeOfTask);
+            view.setResult(sumTimeOfExeAllTasks(resultList), resultList.size());
         }
+        view.setTasksInQueue(executionQueue.get());
+        view.setTimeOfTaskExe(0);
 
+    }
+
+    private int sumTimeOfExeAllTasks(List<Integer> resultList){
+        int sum = 0;
+        for(int i : resultList){
+            sum+=i;
+        }
+        return sum;
     }
 
     public void stop() {
@@ -72,6 +90,9 @@ public class ExecutionThread implements Callable<List<Integer>> {
 
     private void getPermit(){
         try {
+            if(taskType == TaskType.A || taskType == TaskType.B){//temp hack for right order execution threads
+                return;
+            }
             if (!hasPermit.get()) {
                 semaphore.acquire(amountOfNeededPermit);
                 hasPermit.set(true);
@@ -82,15 +103,13 @@ public class ExecutionThread implements Callable<List<Integer>> {
     }
 
     private void releasePermit(){
-        if (hasPermit.get()) {
             semaphore.release(amountOfNeededPermit);
             hasPermit.set(false);
-        }
     }
 
     private void startArriveTimer(){
         Thread thread = new Thread(new ArriveTaskTimer());
-        //thread.setDaemon(true);
+       // thread.setDaemon(true);
         thread.start();
     }
 
@@ -99,6 +118,10 @@ public class ExecutionThread implements Callable<List<Integer>> {
             try {
                 while (!stop.get()) {
                     if (amountOfTasks.get() == 0) {
+                        view.setTimeOfArriveTask(0);
+                        break;
+                    }
+                    if (limit.get() <= executionQueue.get()) {
                         Thread.currentThread().yield();
 
                     } else {
