@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.util.Map;
 
 public class MainExecuteListenerImpl implements MainActionListener{
-    private ExecutionService executionService;
+    private volatile ExecutionService executionService;
     private MainSchemaWindow mainSchemaWindow;
 
     public MainExecuteListenerImpl(ExecutionService executionService, MainSchemaWindow mainSchemaWindow) {
@@ -26,7 +26,7 @@ public class MainExecuteListenerImpl implements MainActionListener{
 
             case MainActionListener.STOP_SERVICE :
                 executionService.stopServiceAndGetResult();
-                break;
+            break;
         }
     }
     void run() {

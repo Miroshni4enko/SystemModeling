@@ -18,7 +18,7 @@ public class ExecutionThreadsService implements ExecutionService {
     public final static int AMOUNT_PERMIT_FOR_THREAD_WITH_CONDITION = 2;// when A and B tasks do release permit C get 2 permit
     private ExecutorService executorService = Executors.newFixedThreadPool(6);
     private InitThreads initThreads;
-    private List<Future<List<Integer>>> list;
+    private volatile List<Future<List<Integer>>> list;
 
     public void startService(MainSchemaWindow mainSchemaWindow) throws InterruptedException {
         initThreads = new InitThreads(mainSchemaWindow);
@@ -31,16 +31,18 @@ public class ExecutionThreadsService implements ExecutionService {
     public Map<TaskType, List<Integer>> stopServiceAndGetResult()  {
         Map<TaskType, List<Integer>> resultMap = new EnumMap<TaskType, List<Integer>>(TaskType.class);
         initThreads.stopAllThreads();
-        try {
+        /*try {
             resultMap.put(A , list.get(0).get());
             resultMap.put(B , list.get(1).get());
             resultMap.put(C , list.get(2).get());
             executorService.shutdown();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
+
         } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+           // e.printStackTrace();
+
+        }*/
         return resultMap;
     }
 }
