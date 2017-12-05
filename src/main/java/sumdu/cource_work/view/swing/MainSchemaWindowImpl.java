@@ -1,10 +1,7 @@
 package sumdu.cource_work.view.swing;
 
 import sumdu.cource_work.controller.MainActionListener;
-import sumdu.cource_work.view.ControlThreadView;
-import sumdu.cource_work.view.InitializeAmountOfTasks;
-import sumdu.cource_work.view.InitializeLimitsOfTasks;
-import sumdu.cource_work.view.MainSchemaWindow;
+import sumdu.cource_work.view.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -17,6 +14,7 @@ public class MainSchemaWindowImpl extends JFrame implements MainSchemaWindow {
     private Box mainBox = Box.createVerticalBox();
     private InitializeAmountOfTasksImpl initializeFields = new InitializeAmountOfTasksImpl();
     private InitializeLimitsOfTasksBox initializeLimitsOfTasksBox = new InitializeLimitsOfTasksBox();
+    private InitializeTimeExecution initTimeExe = new InitializeTimeExecution();
     private ActionListener actionListener;
     private ControlThreadViewImpl controlThreadViewA = new ControlThreadViewImpl();;
     private ControlThreadViewImpl controlThreadViewB = new ControlThreadViewImpl();;
@@ -56,9 +54,11 @@ public class MainSchemaWindowImpl extends JFrame implements MainSchemaWindow {
         mainBox.add(controlThreadViewC);
         mainBox.add(Box.createVerticalStrut(17));
 
-        mainBox.add(initializeFields);
+        mainBox.add(initTimeExe);
         mainBox.add(Box.createVerticalStrut(17));
-        mainBox.add(initializeLimitsOfTasksBox);
+        /*mainBox.add(initializeFields);
+        mainBox.add(Box.createVerticalStrut(17));
+        mainBox.add(initializeLimitsOfTasksBox);*/
         Box mainControlBox = new MainControlBox(actionListener);
         mainBox.add(Box.createVerticalStrut(17));
         mainBox.add(mainControlBox);
@@ -87,6 +87,11 @@ public class MainSchemaWindowImpl extends JFrame implements MainSchemaWindow {
     @Override
     public InitializeLimitsOfTasks getInitializedLimitFields() {
         return initializeLimitsOfTasksBox;
+    }
+
+    @Override
+    public InitTimeExe getInitTimeExeView() {
+        return initTimeExe;
     }
 
 }

@@ -40,8 +40,16 @@ public class InitThreads {
     }*/
 
     public Map<TaskType, ExecutionThread> createExecutionThreads() {
-        Map<TaskType, Integer> initValueMap = mainSchemaWindow.getInitializedFields().getInitAmountOfTasks();
-        Map<TaskType, Integer> initLimitValueMap = mainSchemaWindow.getInitializedLimitFields().getInitLimitsOfTasks();
+        Map<TaskType, Integer> initValueMap = new EnumMap<>(TaskType.class);
+        initValueMap.put(A, 3); // mainSchemaWindow.getInitializedFields().getInitAmountOfTasks();
+        initValueMap.put(B, 3);
+        initValueMap.put(C, 5);
+
+        Map<TaskType, Integer> initLimitValueMap = new EnumMap<>(TaskType.class);//mainSchemaWindow.getInitializedLimitFields().getInitLimitsOfTasks();
+        initLimitValueMap.put(A, 3);
+        initLimitValueMap.put(B, 3);
+        initLimitValueMap.put(C, 3);
+
         threadsMap.put(A, new ExecutionThread(semaphore, AMOUNT_PERMIT_FOR_PARALLEL_THREAD, initValueMap.get(A), initLimitValueMap.get(A), A, mainSchemaWindow.getViewForA()));
         threadsMap.put(B, new ExecutionThread(semaphore, AMOUNT_PERMIT_FOR_PARALLEL_THREAD, initValueMap.get(B), initLimitValueMap.get(B), B, mainSchemaWindow.getViewForB()));
         threadsMap.put(C, new ExecutionThread(semaphore, AMOUNT_PERMIT_FOR_THREAD_WITH_CONDITION, initValueMap.get(C), initLimitValueMap.get(B), C, mainSchemaWindow.getViewForC()));

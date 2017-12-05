@@ -11,12 +11,12 @@ public class MainControlBox extends HorizontalBox  {
 
 
     private JButton startService = new JButton("Start");
-    private JButton stopService = new JButton("Stop");
+    //private JButton stopService = new JButton("Stop");
 
     {
         this.add(startService);
-        this.add(Box.createHorizontalStrut(50));
-        this.add(stopService);
+        //this.add(Box.createHorizontalStrut(50));
+        //this.add(stopService);
     }
 
     public MainControlBox(ActionListener actionListener) {
@@ -26,9 +26,9 @@ public class MainControlBox extends HorizontalBox  {
 
     private  void initActionForButtons(){
         startService.setActionCommand(MainActionListener.START_SERVICE);
-        stopService.setActionCommand(MainActionListener.STOP_SERVICE);
+        //stopService.setActionCommand(MainActionListener.STOP_SERVICE);
         startService.addActionListener(actionListener);
-        stopService.addActionListener(actionListener);
+        //stopService.addActionListener(actionListener);
     }
 
 }

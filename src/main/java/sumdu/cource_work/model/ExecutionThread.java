@@ -62,14 +62,16 @@ public class ExecutionThread implements Callable<List<Integer>> {
     }
 
     private void executeTasks(List<Integer> resultList) throws InterruptedException {
-        for ( ; executionQueue.get() > 0; executionQueue.decrementAndGet()){
-            view.setTasksInQueue(executionQueue.get());
-            int timeOfTask = taskType.getTaskTime();
-            System.out.println("i = " + executionQueue +" taskType = "+ taskType.name() + "timeOfTask = " + timeOfTask);
-            view.setTimeOfTaskExe(timeOfTask);
-            TimeUnit.SECONDS.sleep(timeOfTask);
-            resultList.add(timeOfTask);
-            view.setResult(sumTimeOfExeAllTasks(resultList), resultList.size());
+        for ( ; executionQueue.get() > 0 ; executionQueue.decrementAndGet()){
+            if(!stop.get()) {
+                view.setTasksInQueue(executionQueue.get());
+                int timeOfTask = taskType.getTaskTime();
+                System.out.println("i = " + executionQueue + " taskType = " + taskType.name() + "timeOfTask = " + timeOfTask);
+                view.setTimeOfTaskExe(timeOfTask);
+                TimeUnit.SECONDS.sleep(timeOfTask);
+                resultList.add(timeOfTask);
+                view.setResult(sumTimeOfExeAllTasks(resultList), resultList.size());
+            }
         }
         view.setTasksInQueue(executionQueue.get());
         view.setTimeOfTaskExe(0);

@@ -10,6 +10,7 @@ public interface MainSchemaWindow {
     void closeWindow();
     InitializeAmountOfTasks getInitializedFields();
     InitializeLimitsOfTasks getInitializedLimitFields();
+    InitTimeExe getInitTimeExeView();
     void setMainActionListener(MainActionListener mainActionListener);
     ControlThreadView getViewForA();
     ControlThreadView getViewForB();

@@ -1,11 +1,14 @@
 package sumdu.cource_work.controller;
 
-import sumdu.cource_work.model.TaskType;
+
 import sumdu.cource_work.view.MainSchemaWindow;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.Map;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class MainExecuteListenerImpl implements MainActionListener{
     private volatile ExecutionService executionService;
@@ -30,7 +33,28 @@ public class MainExecuteListenerImpl implements MainActionListener{
         }
     }
     void run() {
+        final java.util.Timer timer = new Timer();
+        final TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    executionService.stopServiceAndGetResult();
+                    JOptionPane.showMessageDialog(null, "Time over!");
+                } catch (IllegalArgumentException e1){
+                    JOptionPane.showMessageDialog(null, "Some field is empty, please fill it");
+                }
+            }
+        };
+
+
         Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                timer.schedule(timerTask,TimeUnit.SECONDS.toMillis(mainSchemaWindow.getInitTimeExeView().getExeTime()));
+            }
+        });
+        System.out.println((TimeUnit.SECONDS.toMillis(mainSchemaWindow.getInitTimeExeView().getExeTime())));
+        Thread thread1 = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -43,5 +67,7 @@ public class MainExecuteListenerImpl implements MainActionListener{
             }
         });
         thread.start();
+        thread1.start();
     }
+
 }
