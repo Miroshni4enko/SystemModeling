@@ -55,7 +55,7 @@ public class MainSchemaWindowImpl extends JFrame implements MainSchemaWindow {
         mainBox.add(Box.createVerticalStrut(17));
 
         mainBox.add(initTimeExe);
-        mainBox.add(Box.createVerticalStrut(17));
+        //mainBox.add(Box.createVerticalStrut(17));
         /*mainBox.add(initializeFields);
         mainBox.add(Box.createVerticalStrut(17));
         mainBox.add(initializeLimitsOfTasksBox);*/

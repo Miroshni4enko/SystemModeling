@@ -11,8 +11,10 @@ import java.awt.*;
 public class InitializeTimeExecution extends  HorizontalBox implements InitTimeExe {
     private JTextField initTimeExe = new JTextField(4);
     {
+        this.add(Box.createHorizontalStrut(200));
         this.add(new Label(" Init time execution:"));
         this.add(initTimeExe);
+        this.add(Box.createHorizontalStrut(200));
     }
 
     @Override
